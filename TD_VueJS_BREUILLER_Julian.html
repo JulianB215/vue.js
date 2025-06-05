@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>TD Vue.js - Exercices complets</title>
+  <script src="https://unpkg.com/vue@3"></script>
+  <style>
+    section { margin-bottom: 40px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    h2 { margin-top: 0; }
+    input, textarea, button { margin: 5px 0; display: block; }
+  </style>
+</head>
+<body>
+
+<h1>TD Vue.js - Exercices complets</h1>
+
+<!-- Exercice 1 -->
+<section id="app1">
+  <h2>Exercice 1 : Compteur de clics</h2>
+  <button @click="incrementer">Cliquez-moi</button>
+  <p>Nombre de clics : {{ compteur }}</p>
+</section>
+
+<!-- Exercice 2 -->
+<section id="app2">
+  <h2>Exercice 2 : Éditeur de texte</h2>
+  <textarea v-model="texte"></textarea>
+  <p>Texte saisi : {{ texte }}</p>
+</section>
+
+<!-- Exercice 3 -->
+<section id="app3">
+  <h2>Exercice 3 : Calculatrice TVA</h2>
+  <input type="number" v-model="ht" placeholder="Montant HT">
+  <p>Montant TTC : {{ ttc }}</p>
+</section>
+
+<!-- Exercice 4 -->
+<section id="app4">
+  <h2>Exercice 4 : Compteur de mots</h2>
+  <textarea v-model="texte"></textarea>
+  <p>Nombre de mots : {{ nbMots }}</p>
+</section>
+
+<!-- Exercice 5 -->
+<section id="app5">
+  <h2>Exercice 5 : v-if Condition</h2>
+  <p v-if="isTrue">La condition est vraie</p>
+  <p v-else>La condition est fausse</p>
+</section>
+
+<!-- Exercice 6 -->
+<section id="app6">
+  <h2>Exercice 6 : Message de bienvenue</h2>
+  <input v-model="nom" placeholder="Votre nom">
+  <button @click="affiche = true">Afficher</button>
+  <p v-if="affiche">Bienvenue, {{ nom }} !</p>
+</section>
+
+<!-- Exercice 7 -->
+<section id="app7">
+  <h2>Exercice 7 : Case à cocher</h2>
+  <input type="checkbox" v-model="isChecked">
+  <label>{{ isChecked ? 'Coché' : 'Décoché' }}</label>
+</section>
+
+<!-- Exercice 9 -->
+<section id="app9">
+  <h2>Exercice 9 : Liste de fruits</h2>
+  <ul>
+    <li v-for="fruit in fruits">{{ `Le ${fruit} a une longueur de ${fruit.length} caractères.` }}</li>
+  </ul>
+</section>
+
+<!-- Exercice 10 -->
+<section id="app10">
+  <h2>Exercice 10 : Bienvenue multilingue</h2>
+  <button @click="langue='fr'">Français</button>
+  <button @click="langue='en'">Anglais</button>
+  <button @click="langue='es'">Espagnol</button>
+  <p v-if="langue === 'fr'">Bienvenue</p>
+  <p v-else-if="langue === 'en'">Welcome</p>
+  <p v-else-if="langue === 'es'">¡Bienvenido!</p>
+</section>
+
+<!-- Exercice 11 -->
+<section id="app11">
+  <h2>Exercice 11 : Conversion Température</h2>
+  <input v-model="celsius" type="number" placeholder="Température en °C">
+  <p>Fahrenheit : {{ fahrenheit }}</p>
+  <p v-if="celsius >= 100">L'eau bout à cette température !</p>
+</section>
+
+<!-- Exercice 12 -->
+<section id="app12">
+  <h2>Exercice 12 : Réservation d'hôtel</h2>
+  <input v-model="nom" placeholder="Nom">
+  <input v-model="email" placeholder="Email">
+  <input type="date" v-model="dateArrivee">
+  <input type="date" v-model="dateDepart">
+  <p v-if="dateArrivee && dateDepart">
+    Nombre de nuits : {{ nbNuits }}<br>
+    Total : {{ total }} €
+  </p>
+</section>
+
+<script>
+Vue.createApp({
+  data() { return { compteur: 0 }; },
+  methods: { incrementer() { this.compteur++; } }
+}).mount('#app1');
+
+Vue.createApp({
+  data() { return { texte: '' }; }
+}).mount('#app2');
+
+Vue.createApp({
+  data() { return { ht: 0 }; },
+  computed: { ttc() { return (this.ht * 1.2).toFixed(2); } }
+}).mount('#app3');
+
+Vue.createApp({
+  data() { return { texte: '' }; },
+  computed: {
+    nbMots() { return this.texte.trim().split(/\s+/).filter(Boolean).length; }
+  }
+}).mount('#app4');
+
+const vm = Vue.createApp({
+  data() { return { isTrue: true }; }
+}).mount('#app5');
+
+Vue.createApp({
+  data() { return { nom: '', affiche: false }; }
+}).mount('#app6');
+
+Vue.createApp({
+  data() { return { isChecked: false }; }
+}).mount('#app7');
+
+Vue.createApp({
+  data() { return { fruits: ['Pomme', 'Banane', 'Orange'] }; }
+}).mount('#app9');
+
+Vue.createApp({
+  data() { return { langue: 'en' }; }
+}).mount('#app10');
+
+Vue.createApp({
+  data() { return { celsius: 0 }; },
+  computed: {
+    fahrenheit() { return (this.celsius * 9 / 5 + 32).toFixed(2); }
+  }
+}).mount('#app11');
+
+Vue.createApp({
+  data() {
+    return {
+      nom: '', email: '',
+      dateArrivee: '', dateDepart: '',
+      tarif: 100
+    };
+  },
+  computed: {
+    nbNuits() {
+      const debut = new Date(this.dateArrivee);
+      const fin = new Date(this.dateDepart);
+      return (fin - debut) / (1000 * 60 * 60 * 24) || 0;
+    },
+    total() {
+      return this.nbNuits * this.tarif;
+    }
+  }
+}).mount('#app12');
+</script>
+
+</body>
+</html>
